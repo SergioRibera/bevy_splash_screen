@@ -74,17 +74,7 @@ where
     }
 
     pub fn add_screen(mut self, screen: SplashScreen) -> Self {
-        self.screens.0.push(SplashScreen {
-            brands: screen
-                .brands
-                .iter()
-                .map(|brand| SplashItem {
-                    ease_function: EaseMethod::Linear,
-                    ..brand.clone()
-                })
-                .collect(),
-            ..screen
-        });
+        self.screens.0.push(screen);
         self
     }
 }
@@ -107,7 +97,7 @@ where
             ))
             .add_startup_system(create_splash)
             .add_systems((
-                component_animator_system::<BackgroundColor>,
+                component_animator_system::<BackgroundColor>.run_if(in_state(self.state.clone())),
                 update_splash::<S>.run_if(in_state(self.state.clone())),
             ));
 
