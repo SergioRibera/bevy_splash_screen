@@ -3,7 +3,7 @@ name = "bevy_splash_screen"
 description = "A plugin for bevy which allows you to create screens to show the brands and development teams behind your amazing game"
 version = "0.1.0"
 edition = "2021"
-license = "MIT OR APACHE-2.0"
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/SergioRibera/bevy_splash_screen"
 keywords = ["gamedev", "ui", "bevy"]
 
