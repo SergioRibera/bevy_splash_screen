@@ -1,9 +1,7 @@
 use std::time::Duration;
 
 use bevy::prelude::*;
-use bevy_splash_screen::{
-    EaseFunction, SplashAssetType, SplashItem, SplashPlugin, SplashScreen,
-};
+use bevy_splash_screen::{EaseFunction, SplashAssetType, SplashItem, SplashPlugin, SplashScreen};
 
 #[derive(Clone, Copy, Debug, Default, States, Hash, PartialEq, Eq)]
 enum ScreenStates {
@@ -17,8 +15,8 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_state::<ScreenStates>()
         .add_plugin(
-            SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu, true)
-                .add_screen(SplashScreen {
+            SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu, true).add_screen(
+                SplashScreen {
                     brands: vec![
                         SplashItem {
                             asset: SplashAssetType::SingleText(
@@ -59,7 +57,7 @@ fn main() {
                         },
                         SplashItem {
                             asset: SplashAssetType::SingleImage("bevy_logo.png".to_string()),
-                            tint: Color::GREEN,
+                            tint: Color::WHITE,
                             size: Size::new(Val::Percent(60.), Val::Px(150.)),
                             ease_function: EaseFunction::QuinticInOut.into(),
                             duration: Duration::from_secs_f32(5.),
@@ -68,7 +66,8 @@ fn main() {
                     ],
                     background_color: BackgroundColor(Color::BLACK),
                     ..default()
-                })
+                },
+            ),
         )
         .add_startup_system(create_scene)
         .run()
