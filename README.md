@@ -1,4 +1,5 @@
 # Bevy Splash Screen
+![BevySplashScreen_Presentation](https://user-images.githubusercontent.com/56278796/235970678-5ec68136-4624-419d-b1e1-f7d9f311bdae.gif)
 
 </br>
 <p align="center">
