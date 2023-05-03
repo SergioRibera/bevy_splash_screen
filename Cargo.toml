@@ -2,6 +2,8 @@
 name = "bevy_splash_screen"
 version = "0.0.0"
 edition = "2021"
+license = "MIT OR APACHE-2.0"
+repository = "https://github.com/SergioRibera/bevy_splash_screen"
 
 [dependencies]
 bevy = "0.10.1"
