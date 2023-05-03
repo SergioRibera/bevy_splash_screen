@@ -1,6 +1,10 @@
 use bevy::prelude::*;
 use bevy_tweening::lens::*;
 
+pub trait InstanceLens {
+    fn create(start: Color, end: Color) -> Self;
+}
+
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct SplashImageColorLens {
     /// Start color.
@@ -17,6 +21,12 @@ pub struct SplashTextColorLens {
     pub end: Color,
 }
 
+impl InstanceLens for SplashTextColorLens {
+    fn create(start: Color, end: Color) -> Self {
+        Self { start, end }
+    }
+}
+
 impl Lens<Text> for SplashTextColorLens {
     fn lerp(&mut self, target: &mut Text, ratio: f32) {
         let start: Vec4 = self.start.into();
@@ -26,6 +36,12 @@ impl Lens<Text> for SplashTextColorLens {
             .sections
             .iter_mut()
             .for_each(|section| section.style.color = value.into());
+    }
+}
+
+impl InstanceLens for SplashImageColorLens {
+    fn create(start: Color, end: Color) -> Self {
+        Self { start, end }
     }
 }
 
