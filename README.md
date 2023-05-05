@@ -12,7 +12,7 @@ Aviable and compatible versions
 
 |  bevy  |   SplashScreen  |
 |--------|-----------------|
-| 0.10.1 |      0.2.0      |
+| 0.10.1 |      0.3.0      |
 
 # Features
 - Suport multiple screens (Multiple brands on sequencial screens)
@@ -29,7 +29,7 @@ Add to Cargo.toml
 ```toml
 [dependencies]
 bevy = "0.10.1"
-bevy_splash_screen = "0.2.0"
+bevy_splash_screen = "0.3.0"
 ```
 
 > **WARN:** You probably need to add this if you also use `bevy_tweening`
