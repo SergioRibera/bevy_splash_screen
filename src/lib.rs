@@ -8,8 +8,8 @@ mod splash;
 mod systems;
 
 pub use lens::*;
-pub use systems::ClearSplash;
 use splash::create_splash;
+pub use systems::ClearSplash;
 use systems::*;
 
 #[derive(Clone, Component)]
