@@ -2,9 +2,10 @@ use std::time::Duration;
 
 use bevy::prelude::*;
 use bevy_splash_screen::{
-    Animator, ClearSplash, EaseFunction, RepeatCount, RepeatStrategy, SplashAssetType, SplashItem,
-    SplashPlugin, SplashScreen, SplashScreenSkipEvent, SplashTextColorLens, Tween,
+    ClearSplash, SplashAssetType, SplashItem, SplashPlugin, SplashScreen, SplashScreenSkipEvent,
+    SplashTextColorLens,
 };
+use bevy_tweening::*;
 
 #[derive(Clone, Copy, Debug, Default, States, Hash, PartialEq, Eq)]
 enum ScreenStates {

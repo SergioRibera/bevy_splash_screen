@@ -1,7 +1,8 @@
 use std::time::Duration;
 
 use bevy::prelude::*;
-use bevy_splash_screen::{EaseFunction, SplashAssetType, SplashItem, SplashPlugin, SplashScreen};
+use bevy_splash_screen::{SplashAssetType, SplashItem, SplashPlugin, SplashScreen};
+use bevy_tweening::EaseFunction;
 
 #[derive(Clone, Copy, Debug, Default, States, Hash, PartialEq, Eq)]
 enum ScreenStates {

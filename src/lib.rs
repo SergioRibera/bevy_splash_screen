@@ -1,15 +1,15 @@
 use std::time::Duration;
 
 use bevy::prelude::*;
-pub use bevy_tweening::{lens::*, *};
+use bevy_tweening::*;
 
 mod lens;
 mod splash;
 mod systems;
 
 pub use lens::*;
-use splash::create_splash;
 pub use systems::ClearSplash;
+use splash::create_splash;
 use systems::*;
 
 #[derive(Clone, Component)]
