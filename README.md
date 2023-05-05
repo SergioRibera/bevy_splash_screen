@@ -18,6 +18,7 @@ Aviable and compatible versions
 - Suport multiple screens (Multiple brands on sequencial screens)
 - Multiple brands (images/text)
 - Animated color
+- Custom Skipable Method (Using Event)
 - Background Color for each screen
 - Manage workflow of splash scrreen with States
 
@@ -30,6 +31,12 @@ Add to Cargo.toml
 bevy = "0.10.1"
 bevy_splash_screen = "0.2.0"
 ```
+
+> **WARN:** You probably need to add this if you also use `bevy_tweening`
+> ```
+> [patch.crates-io]
+> bevy_tweening = { git = "https://github.com/sibsibsib/bevy_tweening", branch = "mirrored_repeat_fix" }
+> ```
 
 # TODOs
 Open for contributions =D
