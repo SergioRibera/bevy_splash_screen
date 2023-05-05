@@ -5,9 +5,11 @@ use bevy::{
     prelude::*,
 };
 use bevy_tweening::TweenCompleted;
+
+use crate::{SplashScreenSkipEvent, SplashScreenSkipable};
 // Internal components for system logic
 #[derive(Component)]
-pub(crate) struct ClearSplash;
+pub struct ClearSplash;
 
 #[derive(Resource)]
 pub(crate) struct MaxScreens<S>(pub(crate) u64, pub(crate) S, pub(crate) u64)
@@ -82,43 +84,32 @@ pub(crate) fn splash_skip<S: States>(
     mut mouse: EventReader<MouseButtonInput>,
     mut gamepad: EventReader<GamepadEvent>,
     mut touch: EventReader<TouchInput>,
+    dev_skip: EventReader<SplashScreenSkipEvent>,
     brands: Query<(Entity, &Node, &ClearSplash)>,
     max_screens: Res<MaxScreens<S>>,
+    skipable: Res<SplashScreenSkipable>,
 ) {
-    if brands.is_empty() {
+    if brands.is_empty() || !skipable.0 {
         return;
     }
 
-    use bevy::input::{touch::TouchPhase, ButtonState};
-
     let mut done = false;
 
-    for ev in kbd.iter() {
-        if let ButtonState::Pressed = ev.state {
-            done = true;
+    if !skipable.1 {
+        use bevy::input::{touch::TouchPhase, ButtonState};
+
+        done = kbd.iter().any(|ev| ev.state == ButtonState::Pressed)
+            || mouse.iter().any(|ev| ev.state == ButtonState::Pressed)
+            || touch.iter().any(|ev| ev.phase == TouchPhase::Started);
+
+        for ev in gamepad.iter() {
+            if let GamepadEvent::Button(_) = ev {
+                done = true;
+            }
         }
     }
 
-    for ev in mouse.iter() {
-        if let ButtonState::Pressed = ev.state {
-            done = true;
-        }
-    }
-
-    for ev in gamepad.iter() {
-        if let GamepadEvent::Button(_) = ev {
-            done = true;
-        }
-    }
-
-    for ev in touch.iter() {
-        if let TouchPhase::Started = ev.phase {
-            done = true;
-        }
-    }
-
-    if done {
+    if done || !dev_skip.is_empty() {
         splash_end(cmd, max_screens.1.clone(), brands.iter());
-        println!("Splash End");
     }
 }

@@ -9,6 +9,7 @@ mod systems;
 
 pub use lens::*;
 use splash::create_splash;
+pub use systems::ClearSplash;
 use systems::*;
 
 #[derive(Clone, Component)]
@@ -50,6 +51,11 @@ pub struct SplashScreen {
     pub background_color: BackgroundColor,
 }
 
+pub struct SplashScreenSkipEvent;
+
+#[derive(Default, Clone, Resource)]
+pub(crate) struct SplashScreenSkipable(bool, bool);
+
 #[derive(Default, Clone, Resource)]
 pub(crate) struct SplashScreens(Vec<SplashScreen>);
 
@@ -57,6 +63,7 @@ pub struct SplashPlugin<S> {
     state: S,
     next: S,
     skipable: bool,
+    ignore_default_events: bool,
     screens: SplashScreens,
 }
 
@@ -64,13 +71,24 @@ impl<S> SplashPlugin<S>
 where
     S: States,
 {
-    pub fn new(splash_state: S, next_state: S, skipable: bool) -> Self {
+    pub fn new(splash_state: S, next_state: S) -> Self {
         Self {
-            skipable,
+            skipable: false,
+            ignore_default_events: false,
             state: splash_state,
             next: next_state,
             screens: SplashScreens::default(),
         }
+    }
+
+    pub fn skipable(mut self) -> Self {
+        self.skipable = true;
+        self
+    }
+
+    pub fn ignore_default_events(mut self) -> Self {
+        self.ignore_default_events = true;
+        self
     }
 
     pub fn add_screen(mut self, screen: SplashScreen) -> Self {
@@ -89,7 +107,12 @@ where
         }
 
         app.add_plugin(TweeningPlugin)
+            .add_event::<SplashScreenSkipEvent>()
             .insert_resource(self.screens.clone())
+            .insert_resource(SplashScreenSkipable(
+                self.skipable,
+                self.ignore_default_events,
+            ))
             .insert_resource(MaxScreens(
                 self.screens.0.len() as u64 - 1,
                 self.next.clone(),
@@ -99,10 +122,7 @@ where
             .add_systems((
                 component_animator_system::<BackgroundColor>.run_if(in_state(self.state.clone())),
                 update_splash::<S>.run_if(in_state(self.state.clone())),
-            ));
-
-        if self.skipable {
-            app.add_system(splash_skip::<S>);
-        }
+            ))
+            .add_system(splash_skip::<S>);
     }
 }

@@ -15,8 +15,9 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_state::<ScreenStates>()
         .add_plugin(
-            SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu, true).add_screen(
-                SplashScreen {
+            SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu)
+                .skipable()
+                .add_screen(SplashScreen {
                     brands: vec![
                         SplashItem {
                             asset: SplashAssetType::SingleText(
@@ -66,8 +67,7 @@ fn main() {
                     ],
                     background_color: BackgroundColor(Color::BLACK),
                     ..default()
-                },
-            ),
+                }),
         )
         .add_startup_system(create_scene)
         .run()

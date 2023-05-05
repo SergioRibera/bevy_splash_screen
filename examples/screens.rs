@@ -15,7 +15,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_state::<ScreenStates>()
         .add_plugin(
-            SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu, true)
+            SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu)
                 .add_screen(SplashScreen {
                     brands: vec![SplashItem {
                         asset: SplashAssetType::SingleText(
