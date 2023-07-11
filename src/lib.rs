@@ -30,7 +30,8 @@ pub enum SplashType {
 pub struct SplashItem {
     pub asset: SplashAssetType,
     pub tint: Color,
-    pub size: Size,
+    pub width: Val,
+    pub height: Val,
     pub ease_function: EaseMethod,
     pub duration: Duration,
     pub is_static: bool,
@@ -51,6 +52,7 @@ pub struct SplashScreen {
     pub background_color: BackgroundColor,
 }
 
+#[derive(Event)]
 pub struct SplashScreenSkipEvent;
 
 #[derive(Default, Clone, Resource)]
@@ -106,7 +108,7 @@ where
             return;
         }
 
-        app.add_plugin(TweeningPlugin)
+        app.add_plugins(TweeningPlugin)
             .add_event::<SplashScreenSkipEvent>()
             .insert_resource(self.screens.clone())
             .insert_resource(SplashScreenSkipable(
@@ -118,11 +120,15 @@ where
                 self.next.clone(),
                 (self.screens.0.iter().map(|s| s.brands.len()).sum::<usize>() * 2) as u64,
             ))
-            .add_startup_system(create_splash)
-            .add_systems((
-                component_animator_system::<BackgroundColor>.run_if(in_state(self.state.clone())),
-                update_splash::<S>.run_if(in_state(self.state.clone())),
-            ))
-            .add_system(splash_skip::<S>);
+            .add_systems(Startup, create_splash)
+            .add_systems(
+                Update,
+                (
+                    component_animator_system::<BackgroundColor>
+                        .run_if(in_state(self.state.clone())),
+                    update_splash::<S>.run_if(in_state(self.state.clone())),
+                    splash_skip::<S>,
+                ),
+            );
     }
 }

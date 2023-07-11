@@ -41,11 +41,9 @@ pub(crate) fn create_splash(
         style: Style {
             display: Display::Flex,
             position_type: PositionType::Absolute,
-            size: Size {
-                width: Val::Percent(100.),
-                height: Val::Percent(100.),
-            },
-            overflow: Overflow::Hidden,
+            width: Val::Percent(100.),
+            height: Val::Percent(100.),
+            overflow: Overflow::clip(),
             ..default()
         },
         background_color: BackgroundColor(screens.0[0].background_color.0),
@@ -81,11 +79,9 @@ pub(crate) fn create_splash(
                 align_items: AlignItems::Center,
                 align_content: AlignContent::Center,
                 justify_content: JustifyContent::Center,
-                size: Size {
-                    width: Val::Percent(100.),
-                    height: Val::Percent(100.),
-                },
-                overflow: Overflow::Hidden,
+                width: Val::Percent(100.),
+                height: Val::Percent(100.),
+                overflow: Overflow::clip(),
                 ..default()
             },
             ..default()
@@ -109,7 +105,8 @@ pub(crate) fn create_splash(
                                 style: Style {
                                     flex_direction,
                                     flex_wrap,
-                                    size: brand.size,
+                                    width: brand.width,
+                                    height: brand.height,
                                     ..default()
                                 },
                                 ..default()
@@ -129,7 +126,8 @@ pub(crate) fn create_splash(
                                 flip_y: false,
                             },
                             style: Style {
-                                size: brand.size,
+                                width: brand.width,
+                                height: brand.height,
                                 ..default()
                             },
                             ..default()

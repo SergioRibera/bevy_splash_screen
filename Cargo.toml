@@ -8,8 +8,8 @@ repository = "https://github.com/SergioRibera/bevy_splash_screen"
 keywords = ["gamedev", "ui", "bevy"]
 
 [dependencies]
-bevy = "0.10.1"
-bevy_tweening = "0.7.0"
+bevy = "0.11"
+bevy_tweening = { version = "0.8", git = "https://github.com/djeedai/bevy_tweening" }
 
-[patch.crates-io]
-bevy_tweening = { git = "https://github.com/sibsibsib/bevy_tweening", branch = "mirrored_repeat_fix" }
+[patch."https://github.com/djeedai/bevy_tweening"]
+bevy_tweening = { git = "https://github.com/SergioRibera/bevy_tweening", branch = "infinite_mirrored" }

@@ -18,7 +18,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_state::<ScreenStates>()
-        .add_plugin(
+        .add_plugins(
             SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu)
                 .ignore_default_events()
                 .skipable()
@@ -45,7 +45,8 @@ fn main() {
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::WHITE,
-                        size: Size::new(Val::Percent(40.), Val::Px(80.)),
+                        width: Val::Percent(40.),
+                        height: Val::Px(80.),
                         ease_function: EaseFunction::QuarticInOut.into(),
                         duration: Duration::from_secs(5),
                         is_static: false,
@@ -67,7 +68,8 @@ fn main() {
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::WHITE,
-                        size: Size::new(Val::Percent(35.), Val::Px(160.)),
+                        width: Val::Percent(35.),
+                        height: Val::Px(160.),
                         ease_function: EaseFunction::QuarticInOut.into(),
                         duration: Duration::from_secs(5),
                         is_static: false,
@@ -76,8 +78,8 @@ fn main() {
                     ..default()
                 }),
         )
-        .add_startup_system(create_scene)
-        .add_system(button_system)
+        .add_systems(Startup, create_scene)
+        .add_systems(Update, button_system)
         .run()
 }
 
@@ -92,11 +94,9 @@ fn create_scene(mut cmd: Commands, assets: ResMut<AssetServer>) {
             align_items: AlignItems::FlexEnd,
             align_content: AlignContent::Center,
             justify_content: JustifyContent::Center,
-            size: Size {
-                width: Val::Percent(100.),
-                height: Val::Percent(100.),
-            },
-            overflow: Overflow::Hidden,
+            width: Val::Percent(100.),
+            height: Val::Percent(100.),
+            overflow: Overflow::clip(),
             ..default()
         },
         ..default()
@@ -105,7 +105,7 @@ fn create_scene(mut cmd: Commands, assets: ResMut<AssetServer>) {
     .with_children(|cmd| {
         cmd.spawn(ButtonBundle {
             style: Style {
-                size: Size::height(Val::Px(65.0)),
+                height: Val::Px(65.0),
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
                 ..default()
@@ -150,7 +150,7 @@ fn button_system(
 ) {
     for interaction in &mut interaction_query {
         match *interaction {
-            Interaction::Clicked => send_skip.send(SplashScreenSkipEvent),
+            Interaction::Pressed => send_skip.send(SplashScreenSkipEvent),
             _ => {}
         }
     }

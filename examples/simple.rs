@@ -15,7 +15,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_state::<ScreenStates>()
-        .add_plugin(
+        .add_plugins(
             SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu)
                 .skipable()
                 .add_screen(SplashScreen {
@@ -52,7 +52,8 @@ fn main() {
                                 "FiraSans-Bold.ttf".to_string(),
                             ),
                             tint: Color::SEA_GREEN,
-                            size: Size::new(Val::Percent(30.), Val::Px(150.)),
+                            width: Val::Percent(30.),
+                            height: Val::Px(150.),
                             ease_function: EaseFunction::QuarticInOut.into(),
                             duration: Duration::from_secs_f32(5.),
                             is_static: false,
@@ -60,7 +61,8 @@ fn main() {
                         SplashItem {
                             asset: SplashAssetType::SingleImage("bevy_logo.png".to_string()),
                             tint: Color::WHITE,
-                            size: Size::new(Val::Percent(60.), Val::Px(150.)),
+                            width: Val::Percent(60.),
+                            height: Val::Px(150.),
                             ease_function: EaseFunction::QuinticInOut.into(),
                             duration: Duration::from_secs_f32(5.),
                             is_static: true,
@@ -70,7 +72,7 @@ fn main() {
                     ..default()
                 }),
         )
-        .add_startup_system(create_scene)
+        .add_systems(Startup, create_scene)
         .run()
 }
 
