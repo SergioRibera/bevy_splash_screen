@@ -43,7 +43,7 @@ fn main() {
                                         "Sergio Ribera",
                                         TextStyle {
                                             font_size: 32.,
-                                            color: Color::WHITE,
+                                            color: Color::BLUE,
                                             ..default()
                                         },
                                     ),

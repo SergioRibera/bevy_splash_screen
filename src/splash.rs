@@ -111,10 +111,34 @@ pub(crate) fn create_splash(
                                 },
                                 ..default()
                             },
-                            create_animator::<Text, SplashTextColorLens>(
-                                brand,
-                                max_duration,
-                                i_screen,
+                            Animator::new(
+                                Tween::new(
+                                    brand.ease_function,
+                                    Duration::from_secs(1),
+                                    SplashTextColorLens::new(
+                                        text.sections
+                                            .iter()
+                                            .map(|_| Color::WHITE.with_a(0.))
+                                            .collect(),
+                                    ),
+                                )
+                                .then(
+                                    Delay::new(max_duration).then(
+                                        Tween::new(
+                                            brand.ease_function,
+                                            brand.duration,
+                                            SplashTextColorLens::new(
+                                                text.sections
+                                                    .iter()
+                                                    .map(|s| s.style.color)
+                                                    .collect(),
+                                            ),
+                                        )
+                                        .with_repeat_strategy(RepeatStrategy::MirroredRepeat)
+                                        .with_repeat_count(RepeatCount::Finite(2))
+                                        .with_completed_event(i_screen as u64),
+                                    ),
+                                ),
                             ),
                         ))
                     }
