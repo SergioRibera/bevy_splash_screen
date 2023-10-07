@@ -131,10 +131,7 @@ fn create_scene(mut cmd: Commands, assets: ResMut<AssetServer>) {
                     Tween::new(
                         EaseFunction::QuadraticInOut,
                         Duration::from_secs(3),
-                        SplashTextColorLens {
-                            start: Color::WHITE,
-                            end: Color::WHITE.with_a(0.),
-                        },
+                        SplashTextColorLens::new(vec![Color::WHITE]),
                     )
                     .with_repeat_count(RepeatCount::Infinite)
                     .with_repeat_strategy(RepeatStrategy::MirroredRepeat),
