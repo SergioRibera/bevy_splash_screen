@@ -19,6 +19,45 @@ opt-level = 3
 [dev-dependencies]
 bevy = { version = "0.11", default-features = false, features = ["multi-threaded", "bevy_asset", "bevy_winit", "bevy_render", "bevy_sprite", "png"] }
 
+[features]
+default = []
+dev = [
+    "bevy/bevy_asset",
+    "bevy/bevy_scene",
+    "bevy/bevy_winit",
+    "bevy/bevy_core_pipeline",
+    "bevy/bevy_render",
+    "bevy/bevy_sprite",
+    "bevy/bevy_text",
+    "bevy/bevy_ui",
+    "bevy/multi-threaded",
+    "bevy/png",
+    "bevy/ktx2",
+    "bevy/x11",
+    "bevy/bevy_gizmos",
+    "bevy/default_font",
+]
+
+[[example]]
+name = "custom_skip"
+required-features = ["dev"]
+path = "./examples/custom_skip.rs"
+
+[[example]]
+name = "layouts"
+required-features = ["dev"]
+path = "./examples/layouts.rs"
+
+[[example]]
+name = "screens"
+required-features = ["dev"]
+path = "./examples/screens.rs"
+
+[[example]]
+name = "simple"
+required-features = ["dev"]
+path = "./examples/simple.rs"
+
 [dependencies]
 bevy = { version = "0.11", default-features = false }
 bevy_tweening = "0.8"
