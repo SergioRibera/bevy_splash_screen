@@ -28,12 +28,16 @@ impl SplashTextColorLens {
 
 impl Lens<Text> for SplashTextColorLens {
     fn lerp(&mut self, target: &mut Text, ratio: f32) {
-        target.sections.iter_mut().enumerate().for_each(|(i, section)| {
-            let start: Vec4 = self.0[i].with_a(0.).into();
-            let end: Vec4 = self.0[i].into();
-            let value = start.lerp(end, ratio);
-            section.style.color = value.into();
-        });
+        target
+            .sections
+            .iter_mut()
+            .enumerate()
+            .for_each(|(i, section)| {
+                let start: Vec4 = self.0[i].with_a(0.).into();
+                let end: Vec4 = self.0[i].into();
+                let value = start.lerp(end, ratio);
+                section.style.color = value.into();
+            });
     }
 }
 
