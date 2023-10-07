@@ -6,10 +6,15 @@ use bevy::{
 };
 use bevy_tweening::TweenCompleted;
 
-use crate::{SplashScreenSkipEvent, SplashScreenSkipable};
+use crate::{SplashScreenSkipEvent, SplashScreenSkipable, SplashScreens};
 // Internal components for system logic
 #[derive(Component)]
 pub struct ClearSplash;
+
+#[derive(Resource)]
+pub(crate) struct NextStateRes<S>(pub(crate) S)
+where
+    S: States;
 
 #[derive(Resource)]
 pub(crate) struct MaxScreens<S>(pub(crate) u64, pub(crate) S, pub(crate) u64)
@@ -20,6 +25,25 @@ where
 pub(crate) struct SplashBackground {
     pub(super) screens: Vec<u64>,
     pub(super) screen_colors: Vec<Color>,
+}
+
+pub(crate) fn set_max_screens<S: States>(
+    mut cmd: Commands,
+    screens: Res<SplashScreens>,
+    next_state: Res<NextState<S>>,
+) {
+    let next_state = next_state.0.as_ref().unwrap();
+    cmd.remove_resource::<MaxScreens<S>>();
+    cmd.insert_resource(MaxScreens(
+        screens.len() as u64 - 1,
+        next_state.clone(),
+        (screens
+            .screens()
+            .iter()
+            .map(|s| s.brands.len())
+            .sum::<usize>()
+            * 2) as u64,
+    ));
 }
 
 //

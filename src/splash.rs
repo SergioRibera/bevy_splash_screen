@@ -121,7 +121,7 @@ pub(crate) fn create_splash(
                     SplashAssetType::SingleImage(handler) => cmd.spawn((
                         ImageBundle {
                             image: UiImage {
-                                texture: assets.load(handler),
+                                texture: handler.clone(),
                                 flip_x: false,
                                 flip_y: false,
                             },
