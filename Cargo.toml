@@ -17,7 +17,14 @@ opt-level = 1
 opt-level = 3
 
 [dev-dependencies]
-bevy = { version = "0.11", default-features = false, features = ["multi-threaded", "bevy_asset", "bevy_winit", "bevy_render", "bevy_sprite", "png"] }
+bevy = { version = "0.12", default-features = false, features = [
+    "multi-threaded",
+    "bevy_asset",
+    "bevy_winit",
+    "bevy_render",
+    "bevy_sprite",
+    "png",
+] }
 
 [features]
 default = []
@@ -59,8 +66,8 @@ required-features = ["dev"]
 path = "./examples/simple.rs"
 
 [dependencies]
-bevy = { version = "0.11", default-features = false }
-bevy_tweening = "0.8"
+bevy = { version = "0.12", default-features = false }
+bevy_tweening = "0.9"
 
 [patch.crates-io]
 bevy_tweening = { git = "https://github.com/SergioRibera/bevy_tweening", branch = "infinite_mirrored" }
