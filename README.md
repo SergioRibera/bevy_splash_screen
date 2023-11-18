@@ -12,6 +12,7 @@ Aviable and compatible versions
 
 |  bevy  |   SplashScreen  |
 |--------|-----------------|
+|  0.12  |      0.4.4      |
 |  0.11  |      0.4.4      |
 | 0.10.1 |      0.3.0      |
 
@@ -29,7 +30,7 @@ Check out the [examples](./examples) for details.
 Add to Cargo.toml
 ```toml
 [dependencies]
-bevy = "0.11"
+bevy = "0.12"
 bevy_splash_screen = "0.4.4"
 ```
 
