@@ -50,7 +50,7 @@ pub(crate) fn update_splash<S: States>(
     mut brands_showed: Local<HashMap<u64, u64>>,
 ) {
     let mut clear = false;
-    for e in reader.iter() {
+    for e in reader.read() {
         *screens_end += 1;
         clear = e.user_data == max_screens.0 && *screens_end == max_screens.2;
         _ = brands_showed
@@ -98,11 +98,11 @@ pub(crate) fn splash_skip<S: States>(
     if !skipable.1 {
         use bevy::input::{touch::TouchPhase, ButtonState};
 
-        done = kbd.iter().any(|ev| ev.state == ButtonState::Pressed)
-            || mouse.iter().any(|ev| ev.state == ButtonState::Pressed)
-            || touch.iter().any(|ev| ev.phase == TouchPhase::Started);
+        done = kbd.read().any(|ev| ev.state == ButtonState::Pressed)
+            || mouse.read().any(|ev| ev.state == ButtonState::Pressed)
+            || touch.read().any(|ev| ev.phase == TouchPhase::Started);
 
-        for ev in gamepad.iter() {
+        for ev in gamepad.read() {
             if let GamepadEvent::Button(_) = ev {
                 done = true;
             }
