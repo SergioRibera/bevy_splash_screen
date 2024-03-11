@@ -14,7 +14,7 @@ enum ScreenStates {
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_state::<ScreenStates>()
+        .init_state::<ScreenStates>()
         .add_plugins(
             SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu)
                 .add_screen(SplashScreen {
@@ -46,7 +46,7 @@ fn main() {
                                     },
                                 ),
                             ])
-                            .with_alignment(TextAlignment::Center),
+                            .with_justify(JustifyText::Center),
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::SEA_GREEN,
@@ -70,7 +70,7 @@ fn main() {
                                     ..default()
                                 },
                             )])
-                            .with_alignment(TextAlignment::Center),
+                            .with_justify(JustifyText::Center),
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::WHITE,
@@ -95,7 +95,7 @@ fn main() {
                                     ..default()
                                 },
                             )])
-                            .with_alignment(TextAlignment::Center),
+                            .with_justify(JustifyText::Center),
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::RED,

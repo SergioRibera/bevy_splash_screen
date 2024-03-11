@@ -98,7 +98,7 @@ pub(crate) fn create_splash(
                                 ..s.style
                             },
                         }))
-                        .with_alignment(text.alignment);
+                        .with_justify(text.justify);
                         cmd.spawn((
                             TextBundle {
                                 text: text.clone(),
