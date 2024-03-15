@@ -69,3 +69,5 @@ path = "./examples/simple.rs"
 bevy = { version = "0.13", default-features = false }
 bevy_tweening = "0.10"
 
+[patch.crates-io]
+bevy_tweening = { git = "https://github.com/SergioRibera/bevy_tweening", branch = "infinite_mirrored" }
