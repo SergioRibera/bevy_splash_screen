@@ -33,10 +33,9 @@ impl Lens<Text> for SplashTextColorLens {
             .iter_mut()
             .enumerate()
             .for_each(|(i, section)| {
-                let start: Vec4 = self.0[i].with_a(0.).into();
-                let end: Vec4 = self.0[i].into();
-                let value = start.lerp(end, ratio);
-                section.style.color = value.into();
+                use crate::ColorLerper as _;
+                let value = self.0[i].with_a(0.).lerp(&self.0[i], ratio);
+                section.style.color = value;
             });
     }
 }
@@ -49,9 +48,8 @@ impl InstanceLens for SplashImageColorLens {
 
 impl Lens<BackgroundColor> for SplashImageColorLens {
     fn lerp(&mut self, target: &mut BackgroundColor, ratio: f32) {
-        let start: Vec4 = self.start.into();
-        let end: Vec4 = self.end.into();
-        let value = start.lerp(end, ratio);
-        target.0 = value.into();
+        use crate::ColorLerper as _;
+        let value = self.start.lerp(&self.end, ratio);
+        target.0 = value;
     }
 }

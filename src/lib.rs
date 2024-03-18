@@ -132,3 +132,21 @@ where
             );
     }
 }
+
+/// Trait to interpolate between two values.
+/// Needed for color.
+#[allow(dead_code)]
+trait ColorLerper {
+    fn lerp(&self, target: &Self, ratio: f32) -> Self;
+}
+
+#[allow(dead_code)]
+impl ColorLerper for Color {
+    fn lerp(&self, target: &Color, ratio: f32) -> Color {
+        let r = self.r().lerp(target.r(), ratio);
+        let g = self.g().lerp(target.g(), ratio);
+        let b = self.b().lerp(target.b(), ratio);
+        let a = self.a().lerp(target.a(), ratio);
+        Color::rgba(r, g, b, a)
+    }
+}

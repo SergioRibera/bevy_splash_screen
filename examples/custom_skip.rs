@@ -17,7 +17,7 @@ enum ScreenStates {
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_state::<ScreenStates>()
+        .init_state::<ScreenStates>()
         .add_plugins(
             SplashPlugin::new(ScreenStates::Splash, ScreenStates::Menu)
                 .ignore_default_events()
@@ -41,7 +41,7 @@ fn main() {
                                     },
                                 ),
                             ])
-                            .with_alignment(TextAlignment::Center),
+                            .with_justify(JustifyText::Center),
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::WHITE,
@@ -64,7 +64,7 @@ fn main() {
                                     ..default()
                                 },
                             )
-                            .with_alignment(TextAlignment::Center),
+                            .with_justify(JustifyText::Center),
                             "FiraSans-Bold.ttf".to_string(),
                         ),
                         tint: Color::WHITE,
@@ -124,7 +124,7 @@ fn create_scene(mut cmd: Commands, assets: ResMut<AssetServer>) {
                             ..default()
                         },
                     )
-                    .with_alignment(TextAlignment::Center),
+                    .with_justify(JustifyText::Center),
                     ..default()
                 },
                 Animator::new(
