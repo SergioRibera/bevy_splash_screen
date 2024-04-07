@@ -1,6 +1,6 @@
 allow-branch = ["*", "!HEAD"]
 pre-release-replacements = [
-    { file = "README.md", search = "\\|  0\\.12  \\|      [0-9\\.-]+      \\|", replace = "|  0.12  |      {{version}}      |" },
+    { file = "README.md", search = "\\|  0\\.13  \\|      [0-9\\.-]+      \\|", replace = "|  0.13  |      {{version}}      |" },
     { file = "README.md", search = "bevy_splash_screen = \"[0-9\\.-]+\"", replace = "bevy_splash_screen = \"{{version}}\"" },
 ]
 tag-message = "chore: Release {{crate_name}} version {{version}}"

@@ -12,6 +12,7 @@ Aviable and compatible versions
 
 |  bevy  |   SplashScreen  |
 |--------|-----------------|
+|  0.13  |      0.5.0      |
 |  0.12  |      0.5.0      |
 |  0.11  |      0.4.4      |
 | 0.10.1 |      0.3.0      |
