@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_tweening::lens::*;
+use bevy_tweening::Targetable;
 
 pub trait InstanceLens {
     fn create(start: Color, end: Color) -> Self;
@@ -27,14 +28,14 @@ impl SplashTextColorLens {
 }
 
 impl Lens<Text> for SplashTextColorLens {
-    fn lerp(&mut self, target: &mut Text, ratio: f32) {
+    fn lerp(&mut self, target: &mut dyn Targetable<Text>, ratio: f32) {
         target
             .sections
             .iter_mut()
             .enumerate()
             .for_each(|(i, section)| {
                 use crate::ColorLerper as _;
-                let value = self.0[i].with_a(0.).lerp(&self.0[i], ratio);
+                let value = self.0[i].with_alpha(0.).lerp(&self.0[i], ratio);
                 section.style.color = value;
             });
     }
@@ -46,10 +47,10 @@ impl InstanceLens for SplashImageColorLens {
     }
 }
 
-impl Lens<BackgroundColor> for SplashImageColorLens {
-    fn lerp(&mut self, target: &mut BackgroundColor, ratio: f32) {
+impl Lens<UiImage> for SplashImageColorLens {
+    fn lerp(&mut self, target: &mut dyn Targetable<UiImage>, ratio: f32) {
         use crate::ColorLerper as _;
         let value = self.start.lerp(&self.end, ratio);
-        target.0 = value;
+        target.color = value;
     }
 }
