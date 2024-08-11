@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use bevy::{
     input::{gamepad::GamepadEvent, keyboard::KeyboardInput, mouse::MouseButtonInput},
     prelude::*,
+    state::state::{FreelyMutableState, NextState, States},
 };
 use bevy_tweening::TweenCompleted;
 
@@ -25,7 +26,7 @@ pub(crate) struct SplashBackground {
 //
 // Remove all nodes when splash end
 //
-pub(crate) fn splash_end<'a, S: States>(
+pub(crate) fn splash_end<'a, S: FreelyMutableState>(
     mut cmd: Commands,
     next_state: S,
     brands: impl Iterator<Item = (Entity, &'a Node, &'a ClearSplash)>,
@@ -33,13 +34,13 @@ pub(crate) fn splash_end<'a, S: States>(
     for (entity, _, _) in brands {
         cmd.entity(entity).despawn_recursive();
     }
-    cmd.insert_resource(NextState(Some(next_state)));
+    cmd.insert_resource(NextState::Pending(next_state));
 }
 
 //
 // Logic to end splash and change background color
 //
-pub(crate) fn update_splash<S: States>(
+pub(crate) fn update_splash<S: FreelyMutableState>(
     cmd: Commands,
     brands: Query<(Entity, &Node, &ClearSplash)>,
     mut background: Query<(&Node, &mut BackgroundColor, &SplashBackground)>,
@@ -78,7 +79,7 @@ pub(crate) fn update_splash<S: States>(
 //
 // System for skip splash
 //
-pub(crate) fn splash_skip<S: States>(
+pub(crate) fn splash_skip<S: FreelyMutableState>(
     cmd: Commands,
     mut kbd: EventReader<KeyboardInput>,
     mut mouse: EventReader<MouseButtonInput>,

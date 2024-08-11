@@ -118,7 +118,7 @@ pub(crate) fn create_splash(
                                     SplashTextColorLens::new(
                                         text.sections
                                             .iter()
-                                            .map(|_| Color::WHITE.with_a(0.))
+                                            .map(|_| Color::WHITE.with_alpha(0.))
                                             .collect(),
                                     ),
                                 )
@@ -148,6 +148,7 @@ pub(crate) fn create_splash(
                                 texture: assets.load(handler),
                                 flip_x: false,
                                 flip_y: false,
+                                ..default()
                             },
                             style: Style {
                                 width: brand.width,
@@ -156,7 +157,7 @@ pub(crate) fn create_splash(
                             },
                             ..default()
                         },
-                        create_animator::<BackgroundColor, SplashImageColorLens>(
+                        create_animator::<UiImage, SplashImageColorLens>(
                             brand,
                             max_duration,
                             i_screen,
@@ -181,14 +182,14 @@ where
         Tween::new(
             brand.ease_function,
             Duration::from_secs(1),
-            L::create(brand.tint.with_a(0.), brand.tint.with_a(0.)),
+            L::create(brand.tint.with_alpha(0.), brand.tint.with_alpha(0.)),
         )
         .then(
             Delay::new(max_duration).then(
                 Tween::new(
                     brand.ease_function,
                     brand.duration,
-                    L::create(brand.tint.with_a(0.), brand.tint),
+                    L::create(brand.tint.with_alpha(0.), brand.tint),
                 )
                 .with_repeat_strategy(RepeatStrategy::MirroredRepeat)
                 .with_repeat_count(RepeatCount::Finite(2))

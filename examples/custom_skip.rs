@@ -80,7 +80,7 @@ fn main() {
         )
         .add_systems(Startup, create_scene)
         .add_systems(Update, button_system)
-        .run()
+        .run();
 }
 
 fn create_scene(mut cmd: Commands, assets: ResMut<AssetServer>) {
@@ -110,7 +110,7 @@ fn create_scene(mut cmd: Commands, assets: ResMut<AssetServer>) {
                 align_items: AlignItems::Center,
                 ..default()
             },
-            background_color: BackgroundColor(Color::WHITE.with_a(0.)),
+            background_color: BackgroundColor(Color::WHITE.with_alpha(0.)),
             ..default()
         })
         .with_children(|cmd| {
@@ -146,9 +146,8 @@ fn button_system(
     mut send_skip: EventWriter<SplashScreenSkipEvent>,
 ) {
     for interaction in &mut interaction_query {
-        match *interaction {
-            Interaction::Pressed => send_skip.send(SplashScreenSkipEvent),
-            _ => {}
+        if *interaction == Interaction::Pressed {
+            send_skip.send(SplashScreenSkipEvent);
         }
     }
 }

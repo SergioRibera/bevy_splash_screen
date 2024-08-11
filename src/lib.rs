@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use bevy::prelude::*;
+use bevy::state::state::FreelyMutableState;
 use bevy_tweening::*;
 
 mod lens;
@@ -61,7 +62,7 @@ pub(crate) struct SplashScreenSkipable(bool, bool);
 #[derive(Default, Clone, Resource)]
 pub(crate) struct SplashScreens(Vec<SplashScreen>);
 
-pub struct SplashPlugin<S> {
+pub struct SplashPlugin<S: FreelyMutableState> {
     state: S,
     next: S,
     skipable: bool,
@@ -71,7 +72,7 @@ pub struct SplashPlugin<S> {
 
 impl<S> SplashPlugin<S>
 where
-    S: States,
+    S: FreelyMutableState,
 {
     pub fn new(splash_state: S, next_state: S) -> Self {
         Self {
@@ -101,7 +102,7 @@ where
 
 impl<S> Plugin for SplashPlugin<S>
 where
-    S: States,
+    S: FreelyMutableState,
 {
     fn build(&self, app: &mut App) {
         if self.screens.0.is_empty() {
@@ -124,8 +125,7 @@ where
             .add_systems(
                 Update,
                 (
-                    component_animator_system::<BackgroundColor>
-                        .run_if(in_state(self.state.clone())),
+                    component_animator_system::<UiImage>.run_if(in_state(self.state.clone())),
                     update_splash::<S>.run_if(in_state(self.state.clone())),
                     splash_skip::<S>,
                 ),
@@ -143,10 +143,12 @@ trait ColorLerper {
 #[allow(dead_code)]
 impl ColorLerper for Color {
     fn lerp(&self, target: &Color, ratio: f32) -> Color {
-        let r = self.r().lerp(target.r(), ratio);
-        let g = self.g().lerp(target.g(), ratio);
-        let b = self.b().lerp(target.b(), ratio);
-        let a = self.a().lerp(target.a(), ratio);
-        Color::rgba(r, g, b, a)
+        let mut linear = self.to_linear();
+        let linear_target = target.to_linear();
+        linear.red = linear.red.lerp(linear_target.red, ratio);
+        linear.green = linear.green.lerp(linear_target.green, ratio);
+        linear.blue = linear.blue.lerp(linear_target.blue, ratio);
+        linear.alpha = linear.alpha.lerp(linear_target.alpha, ratio);
+        linear.into()
     }
 }
