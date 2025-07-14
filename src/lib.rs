@@ -13,10 +13,24 @@ use splash::create_splash;
 pub use systems::ClearSplash;
 use systems::*;
 
+#[derive(Clone)]
+pub struct SplashText {
+    pub sections: Vec<SplashTextSection>,
+    pub text_alignment: JustifyText,
+}
+
+#[derive(Clone)]
+pub struct SplashTextSection {
+    pub text: Text2d,
+    pub text_font: String,
+    pub text_size: f32,
+    pub text_color: TextColor,
+}
+
 #[derive(Clone, Component)]
 pub enum SplashAssetType {
     /// Content and Font
-    SingleText(Text, String),
+    SingleText(SplashText),
     SingleImage(String),
 }
 
@@ -125,7 +139,7 @@ where
             .add_systems(
                 Update,
                 (
-                    component_animator_system::<UiImage>.run_if(in_state(self.state.clone())),
+                    component_animator_system::<ImageNode>.run_if(in_state(self.state.clone())),
                     update_splash::<S>.run_if(in_state(self.state.clone())),
                     splash_skip::<S>,
                 ),

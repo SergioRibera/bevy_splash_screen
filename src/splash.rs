@@ -6,7 +6,7 @@ use bevy_tweening::*;
 use crate::{
     systems::{ClearSplash, SplashBackground},
     InstanceLens, SplashAssetType, SplashImageColorLens, SplashItem, SplashScreens,
-    SplashTextColorLens, SplashType, WaitScreenType,
+    SplashTextColorLens, SplashTextSection, SplashType, WaitScreenType,
 };
 
 fn get_max_duration(screens: SplashScreens, curr_screen: usize) -> Duration {
@@ -15,7 +15,7 @@ fn get_max_duration(screens: SplashScreens, curr_screen: usize) -> Duration {
     }
     let next_screen = screens.0.get(curr_screen - 1).unwrap();
 
-    return match next_screen.wait_to_start {
+    match next_screen.wait_to_start {
         WaitScreenType::AfterEnd => Duration::from_secs(
             next_screen
                 .brands
@@ -28,7 +28,34 @@ fn get_max_duration(screens: SplashScreens, curr_screen: usize) -> Duration {
                 + 1,
         ),
         WaitScreenType::Specific(t) => t,
-    };
+    }
+}
+
+fn create_text_color_animator(
+    brand: &SplashItem,
+    text_section: &SplashTextSection,
+    i_screen: usize,
+    max_duration: Duration,
+) -> Animator<TextColor> {
+    Animator::new(
+        Tween::new(
+            brand.ease_function,
+            Duration::from_secs(1),
+            SplashTextColorLens::new(text_section.text_color.0.with_alpha(0.)),
+        )
+        .then(
+            Delay::new(max_duration).then(
+                Tween::new(
+                    brand.ease_function,
+                    brand.duration,
+                    SplashTextColorLens::new(text_section.text_color.0.with_alpha(1.)),
+                )
+                .with_repeat_strategy(RepeatStrategy::MirroredRepeat)
+                .with_repeat_count(RepeatCount::Finite(2))
+                .with_completed_event(i_screen as u64),
+            ),
+        ),
+    )
 }
 
 pub(crate) fn create_splash(
@@ -37,8 +64,8 @@ pub(crate) fn create_splash(
     screens: Res<SplashScreens>,
 ) {
     // Background
-    cmd.spawn(NodeBundle {
-        style: Style {
+    cmd.spawn((
+        Node {
             display: Display::Flex,
             position_type: PositionType::Absolute,
             width: Val::Percent(100.),
@@ -46,9 +73,8 @@ pub(crate) fn create_splash(
             overflow: Overflow::clip(),
             ..default()
         },
-        background_color: BackgroundColor(screens.0[0].background_color.0),
-        ..default()
-    })
+        BackgroundColor(screens.0[0].background_color.0),
+    ))
     .insert(ClearSplash)
     .insert(SplashBackground {
         screens: screens
@@ -69,101 +95,103 @@ pub(crate) fn create_splash(
 
         // Parent of screen content
         // Contains brands
-        cmd.spawn(NodeBundle {
-            style: Style {
-                flex_wrap,
-                flex_direction,
-                display: Display::Flex,
-                position_type: PositionType::Absolute,
-                direction: Direction::LeftToRight,
-                align_items: AlignItems::Center,
-                align_content: AlignContent::Center,
-                justify_content: JustifyContent::Center,
-                width: Val::Percent(100.),
-                height: Val::Percent(100.),
-                overflow: Overflow::clip(),
-                ..default()
-            },
+        cmd.spawn(Node {
+            flex_wrap,
+            flex_direction,
+            display: Display::Flex,
+            position_type: PositionType::Absolute,
+            align_items: AlignItems::Center,
+            align_content: AlignContent::Center,
+            justify_content: JustifyContent::Center,
+            width: Val::Percent(100.),
+            height: Val::Percent(100.),
+            overflow: Overflow::clip(),
             ..default()
         })
         .insert(ClearSplash)
         .with_children(|cmd| {
             for brand in screen.brands.iter() {
                 match &brand.asset {
-                    SplashAssetType::SingleText(text, font) => {
-                        let text = Text::from_sections(text.sections.iter().map(|s| TextSection {
-                            value: s.value.clone(),
-                            style: TextStyle {
-                                font: assets.load(font),
-                                ..s.style
-                            },
-                        }))
-                        .with_justify(text.justify);
-                        cmd.spawn((
-                            TextBundle {
-                                text: text.clone(),
-                                style: Style {
+                    SplashAssetType::SingleText(splash_text) => {
+                        if let Some((first_section, remaining_sections)) =
+                            splash_text.sections.split_last()
+                        {
+                            let mut parent_text = cmd.spawn((
+                                first_section.text.clone(),
+                                TextFont {
+                                    font: assets.load(first_section.text_font.clone()),
+                                    font_size: first_section.text_size,
+                                    ..default()
+                                },
+                                first_section.text_color,
+                                Node {
                                     flex_direction,
                                     flex_wrap,
                                     width: brand.width,
                                     height: brand.height,
                                     ..default()
                                 },
-                                ..default()
-                            },
-                            Animator::new(
-                                Tween::new(
-                                    brand.ease_function,
-                                    Duration::from_secs(1),
-                                    SplashTextColorLens::new(
-                                        text.sections
-                                            .iter()
-                                            .map(|_| Color::WHITE.with_alpha(0.))
-                                            .collect(),
-                                    ),
-                                )
-                                .then(
-                                    Delay::new(max_duration).then(
-                                        Tween::new(
-                                            brand.ease_function,
-                                            brand.duration,
-                                            SplashTextColorLens::new(
-                                                text.sections
-                                                    .iter()
-                                                    .map(|s| s.style.color)
-                                                    .collect(),
-                                            ),
-                                        )
-                                        .with_repeat_strategy(RepeatStrategy::MirroredRepeat)
-                                        .with_repeat_count(RepeatCount::Finite(2))
-                                        .with_completed_event(i_screen as u64),
-                                    ),
+                                TextLayout {
+                                    justify: splash_text.text_alignment,
+                                    ..default()
+                                },
+                                create_text_color_animator(
+                                    brand,
+                                    first_section,
+                                    i_screen,
+                                    max_duration,
                                 ),
-                            ),
-                        ))
+                            ));
+
+                            for section in remaining_sections.iter().rev() {
+                                parent_text.with_children(|cmd| {
+                                    cmd.spawn((
+                                        TextSpan(section.text.to_string()),
+                                        TextFont {
+                                            font: assets.load(section.text_font.clone()),
+                                            font_size: section.text_size,
+                                            ..default()
+                                        },
+                                        section.text_color,
+                                        Node {
+                                            flex_direction,
+                                            flex_wrap,
+                                            width: brand.width,
+                                            height: brand.height,
+                                            ..default()
+                                        },
+                                        create_text_color_animator(
+                                            brand,
+                                            section,
+                                            i_screen,
+                                            max_duration,
+                                        ),
+                                    ));
+                                });
+                            }
+                        }
                     }
-                    SplashAssetType::SingleImage(handler) => cmd.spawn((
-                        ImageBundle {
-                            image: UiImage {
-                                texture: assets.load(handler),
+                    SplashAssetType::SingleImage(handler) => {
+                        cmd.spawn((
+                            ImageNode {
+                                image: assets.load(handler),
                                 flip_x: false,
                                 flip_y: false,
                                 ..default()
                             },
-                            style: Style {
+                            Node {
                                 width: brand.width,
                                 height: brand.height,
                                 ..default()
                             },
-                            ..default()
-                        },
-                        create_animator::<UiImage, SplashImageColorLens>(
-                            brand,
-                            max_duration,
-                            i_screen,
-                        ),
-                    )),
-                };
+                            create_animator::<ImageNode, SplashImageColorLens>(
+                                brand,
+                                max_duration,
+                                i_screen,
+                            ),
+                        ));
+                    }
+                }
             }
         });
     }

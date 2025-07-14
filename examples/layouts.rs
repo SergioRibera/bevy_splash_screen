@@ -1,7 +1,9 @@
 use bevy::color::palettes;
 use bevy::prelude::*;
-use bevy_splash_screen::{SplashAssetType, SplashItem, SplashPlugin, SplashScreen, SplashType};
-use bevy_tweening::EaseFunction;
+use bevy_splash_screen::{
+    SplashAssetType, SplashItem, SplashPlugin, SplashScreen, SplashText, SplashTextSection,
+    SplashType,
+};
 use std::time::Duration;
 
 #[derive(Clone, Copy, Debug, Default, States, Hash, PartialEq, Eq)]
@@ -21,36 +23,29 @@ fn main() {
                 .add_screen(SplashScreen {
                     brands: vec![
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([
-                                    TextSection::new(
-                                        "Simple Test\n",
-                                        TextStyle {
-                                            font_size: 40.,
-                                            color: Color::WHITE,
-                                            ..default()
-                                        },
-                                    ),
-                                    TextSection::new(
-                                        "by\n",
-                                        TextStyle {
-                                            font_size: 24.,
-                                            color: Color::WHITE.with_alpha(0.75),
-                                            ..default()
-                                        },
-                                    ),
-                                    TextSection::new(
-                                        "Sergio Ribera",
-                                        TextStyle {
-                                            font_size: 32.,
-                                            color: Color::WHITE,
-                                            ..default()
-                                        },
-                                    ),
-                                ])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![
+                                    SplashTextSection {
+                                        text: "Simple Test\n".into(),
+                                        text_font: "FiraSans-Bold.ttf".to_string(),
+                                        text_size: 40.,
+                                        text_color: Color::WHITE.into(),
+                                    },
+                                    SplashTextSection {
+                                        text: "by\n".into(),
+                                        text_font: "FiraSans-Bold.ttf".to_string(),
+                                        text_size: 24.,
+                                        text_color: Color::WHITE.with_alpha(0.75).into(),
+                                    },
+                                    SplashTextSection {
+                                        text: "Sergio Ribera".into(),
+                                        text_font: "FiraSans-Bold.ttf".to_string(),
+                                        text_size: 32.,
+                                        text_color: Srgba::WHITE.into(),
+                                    },
+                                ],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: palettes::css::SEA_GREEN.into(),
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
@@ -59,18 +54,15 @@ fn main() {
                             is_static: false,
                         },
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([TextSection::new(
-                                    "With Bevy",
-                                    TextStyle {
-                                        font_size: 32.,
-                                        color: Color::WHITE,
-                                        ..default()
-                                    },
-                                )])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![SplashTextSection {
+                                    text: "With Bevy".into(),
+                                    text_font: "FiraSans-Bold.ttf".to_string(),
+                                    text_size: 32.,
+                                    text_color: Color::WHITE.into(),
+                                }],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: Color::WHITE,
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
@@ -86,18 +78,15 @@ fn main() {
                 .add_screen(SplashScreen {
                     brands: vec![
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([TextSection::new(
-                                    "Hola Hola Hola",
-                                    TextStyle {
-                                        font_size: 32.,
-                                        color: Color::WHITE,
-                                        ..default()
-                                    },
-                                )])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![SplashTextSection {
+                                    text: "Hola Hola Hola".into(),
+                                    text_font: "FiraSans-Bold.ttf".to_string(),
+                                    text_size: 32.,
+                                    text_color: Color::WHITE.into(),
+                                }],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: palettes::basic::YELLOW.into(),
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
@@ -106,38 +95,32 @@ fn main() {
                             is_static: false,
                         },
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([TextSection::new(
-                                    "Hello Hello Hello",
-                                    TextStyle {
-                                        font_size: 32.,
-                                        color: Color::WHITE,
-                                        ..default()
-                                    },
-                                )])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![SplashTextSection {
+                                    text: "Hello Hello Hello".into(),
+                                    text_font: "FiraSans-Bold.ttf".to_string(),
+                                    text_size: 32.,
+                                    text_color: Color::WHITE.into(),
+                                }],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: Srgba::BLUE.into(),
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
                             ease_function: EaseFunction::QuarticInOut.into(),
-                            duration: Duration::from_secs_f32(12.),
+                            duration: Duration::from_secs_f32(5.),
                             is_static: false,
                         },
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([TextSection::new(
-                                    "Test Test Test",
-                                    TextStyle {
-                                        font_size: 32.,
-                                        color: Color::WHITE,
-                                        ..default()
-                                    },
-                                )])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![SplashTextSection {
+                                    text: "Test Test Test".into(),
+                                    text_font: "FiraSans-Bold.ttf".to_string(),
+                                    text_size: 32.,
+                                    text_color: Color::WHITE.into(),
+                                }],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: Color::WHITE,
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
@@ -146,18 +129,15 @@ fn main() {
                             is_static: false,
                         },
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([TextSection::new(
-                                    "Bevy Bevy Bevy",
-                                    TextStyle {
-                                        font_size: 32.,
-                                        color: Color::WHITE,
-                                        ..default()
-                                    },
-                                )])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![SplashTextSection {
+                                    text: "Bevy Bevy Bevy".into(),
+                                    text_font: "FiraSans-Bold.ttf".to_string(),
+                                    text_size: 32.,
+                                    text_color: Color::WHITE.into(),
+                                }],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: palettes::basic::PURPLE.into(),
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
@@ -177,5 +157,5 @@ fn main() {
 }
 
 fn create_scene(mut cmd: Commands) {
-    cmd.spawn(Camera2dBundle::default());
+    cmd.spawn(Camera2d::default());
 }

@@ -1,7 +1,9 @@
 use bevy::color::palettes;
 use bevy::prelude::*;
-use bevy_splash_screen::{SplashAssetType, SplashItem, SplashPlugin, SplashScreen};
-use bevy_tweening::EaseFunction;
+use bevy_math::curve::easing::EaseFunction;
+use bevy_splash_screen::{
+    SplashAssetType, SplashItem, SplashPlugin, SplashScreen, SplashText, SplashTextSection,
+};
 use std::time::Duration;
 
 #[derive(Clone, Copy, Debug, Default, States, Hash, PartialEq, Eq)]
@@ -21,40 +23,33 @@ fn main() {
                 .add_screen(SplashScreen {
                     brands: vec![
                         SplashItem {
-                            asset: SplashAssetType::SingleText(
-                                Text::from_sections([
-                                    TextSection::new(
-                                        "Simple Test\n",
-                                        TextStyle {
-                                            font_size: 40.,
-                                            color: Color::WHITE,
-                                            ..default()
-                                        },
-                                    ),
-                                    TextSection::new(
-                                        "by\n",
-                                        TextStyle {
-                                            font_size: 24.,
-                                            color: Color::WHITE.with_alpha(0.75),
-                                            ..default()
-                                        },
-                                    ),
-                                    TextSection::new(
-                                        "Sergio Ribera",
-                                        TextStyle {
-                                            font_size: 32.,
-                                            color: Srgba::BLUE.into(),
-                                            ..default()
-                                        },
-                                    ),
-                                ])
-                                .with_justify(JustifyText::Center),
-                                "FiraSans-Bold.ttf".to_string(),
-                            ),
+                            asset: SplashAssetType::SingleText(SplashText {
+                                sections: vec![
+                                    SplashTextSection {
+                                        text: "Simple Test\n".into(),
+                                        text_font: "FiraSans-Bold.ttf".to_string(),
+                                        text_size: 40.,
+                                        text_color: Color::WHITE.into(),
+                                    },
+                                    SplashTextSection {
+                                        text: "by\n".into(),
+                                        text_font: "FiraSans-Bold.ttf".to_string(),
+                                        text_size: 24.,
+                                        text_color: Color::WHITE.with_alpha(0.75).into(),
+                                    },
+                                    SplashTextSection {
+                                        text: "Sergio Ribera\n".into(),
+                                        text_font: "FiraSans-Bold.ttf".to_string(),
+                                        text_size: 32.,
+                                        text_color: Srgba::BLUE.into(),
+                                    },
+                                ],
+                                text_alignment: JustifyText::Center,
+                            }),
                             tint: palettes::css::SEA_GREEN.into(),
                             width: Val::Percent(30.),
                             height: Val::Px(150.),
-                            ease_function: EaseFunction::QuarticInOut.into(),
+                            ease_function: EaseFunction::QuinticInOut.into(),
                             duration: Duration::from_secs_f32(5.),
                             is_static: false,
                         },
@@ -77,5 +72,5 @@ fn main() {
 }
 
 fn create_scene(mut cmd: Commands) {
-    cmd.spawn(Camera2dBundle::default());
+    cmd.spawn(Camera2d::default());
 }
